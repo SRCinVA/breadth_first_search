@@ -25,6 +25,19 @@ def print_maze(maze, stdscr, path=[]):  # "path" is that ideal shortest path
             stdscr.addstr(i,j*2,value, BLUE) # you need these three pieces of info to draw on to the screen.
                                         # the multiplication spreads the entire stucture out.
 
+def find_start(maze, start):  # you'll already have dropped that start into the maze manually; this is just to find it.
+    for i, row in enumerate(maze):
+        for j, value in enumerate(row):
+            if value == start:
+                return i, j  # tells you where the starting symbol was found.
+
+    return None # if the start is not available.
+
+def find_path(maze, stdscr):
+    start = "0"
+    end = "X"
+    start_pos = find_start(maze, start)
+
 def main(stdscr):  #this stands for 'standard output screen'
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)  # to implement a color.
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
