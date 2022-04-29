@@ -38,6 +38,15 @@ def find_path(maze, stdscr):
     end = "X"
     start_pos = find_start(maze, start)
 
+    # now let's set up the queue for how we will keep track of these
+    q = queue.Queue() # we want to process the first node in the order it was received (if it were the most recent, you would never get anywhere.)
+    q.put((start_pos, [start_pos]))  # put() populates the queue. You pass in the starting position but also a list that concatenates each node that gets added on (I think)
+
+    visited = set() # this what you've already visited (more explanation would have been helpful here.)
+
+    while not q.empty():
+        current_pos, path = q.get() # this pulls in the starting point and the path (but why equate current_pos and start_pos?)
+
 def main(stdscr):  #this stands for 'standard output screen'
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)  # to implement a color.
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
