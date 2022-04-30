@@ -42,10 +42,26 @@ def find_path(maze, stdscr):
     q = queue.Queue() # we want to process the first node in the order it was received (if it were the most recent, you would never get anywhere.)
     q.put((start_pos, [start_pos]))  # put() populates the queue. You pass in the starting position but also a list that concatenates each node that gets added on (I think)
 
+
     visited = set() # this what you've already visited (more explanation would have been helpful here.)
 
     while not q.empty():
         current_pos, path = q.get() # this pulls in the starting point and the path (but why equate current_pos and start_pos?)
+        row, col = current_pos # this will break down the current position (but how ...)
+
+        # then, let's process all of this node's neighbors:
+        if maze[row][col] == end:  # meaning, if the position is equal to an 'X'
+            return path # ... because we've succeeded and are finished
+
+def find_neighbors(maze, row, col): # ... but we need to make sure that they are legitimate moves
+    neighbors = []
+
+    if row > 0: # to serch upward from the node
+        neighbors.append((row - 1, col)) # if it's greater than 0, it's at least 1.
+
+    if row + 1 < len(maze): # with this, you look down
+        neighbors.append((row + 1, col))
+    
 
 def main(stdscr):  #this stands for 'standard output screen'
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)  # to implement a color.
