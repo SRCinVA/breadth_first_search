@@ -53,15 +53,31 @@ def find_path(maze, stdscr):
         if maze[row][col] == end:  # meaning, if the position is equal to an 'X'
             return path # ... because we've succeeded and are finished
 
+        neighbors = find_neighbors(maze, row, col)  # to make sure hte spot is open
+        for neighbor in neighbors:
+            if neighbor in visited:
+                continue # ... so that we don't process it
+
+            r, c = neighbor  # so we don't confuse row and column as above. 
+            if maze[r][c] == "#":  # the character we are using for our borders
+                pass
+
 def find_neighbors(maze, row, col): # ... but we need to make sure that they are legitimate moves
     neighbors = []
 
-    if row > 0: # to serch upward from the node
+    if row > 0: # to search upward from the node
         neighbors.append((row - 1, col)) # if it's greater than 0, it's at least 1.
 
-    if row + 1 < len(maze): # with this, you look down
-        neighbors.append((row + 1, col))
+    if row + 1 < len(maze): # with this, you look down. If it's equal, then you can't look down any
+        neighbors.append((row + 1, col)) 
     
+    if col > 0: # to look left
+        neighbors.append(row, col - 1) # like before, this enables the 0th index.
+
+    if col + 1 < len(maze[0]): # to look right, grab the first line to be sure how many elements there are (maze might not be square)
+        neighbors.append(row, col + 1)
+
+    return neighbors
 
 def main(stdscr):  #this stands for 'standard output screen'
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)  # to implement a color.
