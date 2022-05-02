@@ -56,14 +56,22 @@ def find_path(maze, stdscr):
         neighbors = find_neighbors(maze, row, col)  # to make sure hte spot is open
         for neighbor in neighbors:
             if neighbor in visited:
-                continue # ... so that we don't process it
+                continue # ... so that we don't process it; go to the next one.
 
             r, c = neighbor  # so we don't confuse row and column as above. 
-            if maze[r][c] == "#":  # the character we are using for our borders
-                pass
+            if maze[r][c] == "#":  # the character we are using for our borders; I believe "r" and "c" are the components of the tuple.
+                continue # don't want to process this one, either so you go to the next one.
+
+            # in every other case, we DO want to process the node, like this:
+            new_path = path + [neighbor] # you're just adding the current node to the existing list (you can add lists).
+            q.put((neighbor, new_path)) # add these both to the queue. 
+            visited.add(neighbor) # to make sure we don't process this again.
+
 
 def find_neighbors(maze, row, col): # ... but we need to make sure that they are legitimate moves
     neighbors = []
+
+# remember: this isn't for the node in question; you're just looking N, S, E, W all around it.
 
     if row > 0: # to search upward from the node
         neighbors.append((row - 1, col)) # if it's greater than 0, it's at least 1.
