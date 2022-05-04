@@ -22,8 +22,12 @@ def print_maze(maze, stdscr, path=[]):  # "path" is that ideal shortest path
 
     for i, row in enumerate(maze):  # need to iterate through the maze. "Row" for each individual row, with "i" for which row within the 2D array 
         for j, value in enumerate(row):  #'value' is whatever symbol is in the column.
-            stdscr.addstr(i,j*2,value, BLUE) # you need these three pieces of info to draw on to the screen.
+            if (i,j) in path: # if your current item is in the path ...
+                stdscr.addstr(i,j*2,"X", RED) # you need these three pieces of info to draw red X on to the screen.
                                         # the multiplication spreads the entire stucture out.
+            else:
+                stdscr.addstr(i, j*2, value, BLUE)  # thsi will just draw an empty string
+
 
 def find_start(maze, start):  # you'll already have dropped that start into the maze manually; this is just to find it.
     for i, row in enumerate(maze):
@@ -49,6 +53,11 @@ def find_path(maze, stdscr):
         current_pos, path = q.get() # this pulls in the starting point and the path (but why equate current_pos and start_pos?)
         row, col = current_pos # this will break down the current position (but how ...)
 
+        # this will draw the maze each time we do a while loop
+        stdscr.clear()
+        print_maze(maze, stdscr, path)
+        stdscr.refresh()  # to see what we've written
+
         # then, let's process all of this node's neighbors:
         if maze[row][col] == end:  # meaning, if the position is equal to an 'X'
             return path # ... because we've succeeded and are finished
@@ -64,7 +73,7 @@ def find_path(maze, stdscr):
 
             # in every other case, we DO want to process the node, like this:
             new_path = path + [neighbor] # you're just adding the current node to the existing list (you can add lists).
-            q.put((neighbor, new_path)) # add these both to the queue. 
+            q.put((neighbor, new_path)) # add both to the queue. 
             visited.add(neighbor) # to make sure we don't process this again.
 
 
@@ -80,10 +89,10 @@ def find_neighbors(maze, row, col): # ... but we need to make sure that they are
         neighbors.append((row + 1, col)) 
     
     if col > 0: # to look left
-        neighbors.append(row, col - 1) # like before, this enables the 0th index.
+        neighbors.append((row, col - 1)) # like before, this enables the 0th index.
 
     if col + 1 < len(maze[0]): # to look right, grab the first line to be sure how many elements there are (maze might not be square)
-        neighbors.append(row, col + 1)
+        neighbors.append((row, col + 1))
 
     return neighbors
 
@@ -91,9 +100,7 @@ def main(stdscr):  #this stands for 'standard output screen'
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)  # to implement a color.
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
 
-    stdscr.clear()
-    print_maze(maze, stdscr)
-    stdscr.refresh() # to see what we've written
+    find_path(maze, stdscr)
     stdscr.getch() # "get character" from the user input.
 
 wrapper(main) # initializes the curses module and calls main(). This enables us to control the output.
