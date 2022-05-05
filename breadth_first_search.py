@@ -13,7 +13,7 @@ maze = [
     ["#", " ", "#", " ", "#", " ", "#", " ", "#"],
     ["#", " ", "#", " ", "#", " ", "#", "#", "#"],
     ["#", " ", " ", " ", " ", " ", " ", " ", "#"],
-    ["#", "#", "#", "#", "#", "#", "#", "#", "#"]
+    ["#", "#", "#", "#", "#", "#", "#", "X", "#"]
 ]
 
 def print_maze(maze, stdscr, path=[]):  # "path" is that ideal shortest path
@@ -56,7 +56,10 @@ def find_path(maze, stdscr):
         # this will draw the maze each time we do a while loop
         stdscr.clear()
         print_maze(maze, stdscr, path)
+        time.sleep(0.2) # to slow it down so that we can see it in action.
         stdscr.refresh()  # to see what we've written
+
+
 
         # then, let's process all of this node's neighbors:
         if maze[row][col] == end:  # meaning, if the position is equal to an 'X'
